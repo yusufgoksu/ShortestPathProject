@@ -18,6 +18,11 @@ public class ShortestPathBFS {
     }
 
     public Map<String, Object> findShortestPath(String startCity, String destinationCity) {
+        // Initialize distances for all cities as unreachable (max value)
+        for (String city : graphofCity.getGraph().keySet()) {
+            distances.put(city, Integer.MAX_VALUE);
+        }
+
         open.offer(startCity);
         distances.put(startCity, 0);
 
@@ -34,12 +39,17 @@ public class ShortestPathBFS {
                 String successor = entry.getKey();
                 int distanceToSuccessor = entry.getValue();
 
+                if (distanceToSuccessor == 99999) {
+                    continue; // Skip unreachable cities
+                }
+
+                // If the successor is not in the closed or open sets, or we found a shorter path
                 if (!closed.contains(successor) && !open.contains(successor)) {
                     open.offer(successor);
                     path.put(successor, currentCity);
                     distances.put(successor, distances.get(currentCity) + distanceToSuccessor);
                 } else if (distances.get(successor) > distances.get(currentCity) + distanceToSuccessor) {
-                    // Daha kısa bir yol bulunduysa güncelle
+                    // Found a shorter path
                     path.put(successor, currentCity);
                     distances.put(successor, distances.get(currentCity) + distanceToSuccessor);
                     open.offer(successor);
@@ -47,7 +57,8 @@ public class ShortestPathBFS {
             }
         }
 
-        return null; // Yol bulunamadı
+        // If we exit the loop, no path was found
+        return null; // Return null when no path is found
     }
 
     private Map<String, Object> constructPath(String startCity, String destinationCity) {
@@ -55,14 +66,22 @@ public class ShortestPathBFS {
         String currentCity = destinationCity;
         List<String> pathList = new ArrayList<>();
 
+        // Build the path from destination back to start by following the 'path' map
         while (currentCity != null) {
             pathList.add(currentCity);
             currentCity = path.get(currentCity);
         }
 
         Collections.reverse(pathList);
-        pathMap.put("path", pathList);
-        pathMap.put("distance", distances.get(destinationCity));
+
+        // If the distance to the destination is still unreachable, return a message
+        if (distances.get(destinationCity) == Integer.MAX_VALUE) {
+            pathMap.put("message", "No path found");
+        } else {
+            pathMap.put("path", pathList);
+            pathMap.put("distance", distances.get(destinationCity));
+        }
+
         return pathMap;
     }
 

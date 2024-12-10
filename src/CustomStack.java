@@ -1,9 +1,9 @@
 interface MyStack<T> {
-    void push(T item);
-    T pop();
-    T peek();
-    boolean isEmpty();
-    boolean contains(T item);
+    void push(T item);       // O(1)
+    T pop();                 // O(1)
+    T peek();                // O(1)
+    boolean isEmpty();       // O(1)
+    boolean contains(T item); // O(n)
 }
 
 class CustomStack<T> implements MyStack<T> {
@@ -23,6 +23,10 @@ class CustomStack<T> implements MyStack<T> {
         this.top = null;
     }
 
+    /**
+     * Adds an element to the top of the stack.
+     * Time Complexity: O(1)
+     */
     @Override
     public void push(T item) {
         Node<T> newNode = new Node<>(item);
@@ -30,6 +34,10 @@ class CustomStack<T> implements MyStack<T> {
         top = newNode;
     }
 
+    /**
+     * Removes and returns the top element from the stack.
+     * Time Complexity: O(1)
+     */
     @Override
     public T pop() {
         if (top == null) {
@@ -40,16 +48,28 @@ class CustomStack<T> implements MyStack<T> {
         return data;
     }
 
+    /**
+     * Returns the top element without removing it.
+     * Time Complexity: O(1)
+     */
     @Override
     public T peek() {
         return (top == null) ? null : top.data;
     }
 
+    /**
+     * Checks if the stack is empty.
+     * Time Complexity: O(1)
+     */
     @Override
     public boolean isEmpty() {
         return top == null;
     }
 
+    /**
+     * Checks if the stack contains a specific element.
+     * Time Complexity: O(n)
+     */
     @Override
     public boolean contains(T item) {
         Node<T> current = top;

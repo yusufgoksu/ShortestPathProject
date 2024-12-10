@@ -2,10 +2,7 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Map;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.*;
 
 public class ShortestPath {
     public static void main(String[] args) {
@@ -24,22 +21,28 @@ public class ShortestPath {
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
-            int choice = scanner.nextInt();
-
-            switch (choice) {
-                case 1:
-                    findShortestPath(graphofCity, scanner,false);
-                    break;
-                case 2:
-                    findShortestPath(graphofCity, scanner,true);
-                    break;
-                case 0:
-                    System.out.println("Exiting the program. Goodbye!");
-                    System.exit(0);
-                default:
-                    System.out.println("Invalid choice. Please enter 1, 2, or 0.");
+            try {
+                int choice = scanner.nextInt();
+                switch (choice) {
+                    case 1:
+                        findShortestPath(graphofCity, scanner, false);
+                        break;
+                    case 2:
+                        findShortestPath(graphofCity, scanner, true);
+                        break;
+                    case 0:
+                        System.out.println("Exiting the program. Thank you for choosing us");
+                        System.exit(0);
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please enter 1, 2, or 0.");
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number (1, 2, or 0).");
+                scanner.next();
             }
         }
+
     }
 
 
