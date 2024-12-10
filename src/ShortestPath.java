@@ -25,9 +25,11 @@ public class ShortestPath {
                 int choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
+                        System.out.println("For calculation it will use Dfs Alogorithm");
                         findShortestPath(graphofCity, scanner, false);
                         break;
                     case 2:
+                        System.out.println("For calculation it will use Bfs Alogorithm");
                         findShortestPath(graphofCity, scanner, true);
                         break;
                     case 0:
@@ -85,7 +87,7 @@ public class ShortestPath {
 
         // Başlangıç şehri doğrulama
         while (true) {
-            System.out.print("Enter the start city: ");
+            System.out.print("\nEnter the start city: ");
             startCity = scanner.next().trim().toLowerCase();
 
             if (cityNames.containsKey(startCity)) {
@@ -98,7 +100,7 @@ public class ShortestPath {
 
         // Hedef şehri doğrulama
         while (true) {
-            System.out.print("Enter the destination city: ");
+            System.out.print("\nEnter the destination city: ");
             destinationCity = scanner.next().trim().toLowerCase();
 
             if (cityNames.containsKey(destinationCity)) {

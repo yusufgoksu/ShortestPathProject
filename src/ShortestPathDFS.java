@@ -66,7 +66,7 @@ public class ShortestPathDFS {
 
         Collections.reverse(pathList);
 
-        if (distances.get(destinationCity) == Integer.MAX_VALUE) {
+        if (distances.get(destinationCity) == 9999) {
             pathMap.put("message", "No path found");
         } else {
             pathMap.put("path", pathList);

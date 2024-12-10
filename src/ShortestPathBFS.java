@@ -17,7 +17,7 @@ public class ShortestPathBFS {
 
     public Map<String, Object> findShortestPath(String startCity, String destinationCity) {
         for (String city : graphofCity.getGraph().keySet()) {
-            distances.put(city, Integer.MAX_VALUE);
+            distances.put(city, 9999);
         }
 
         open.offer(startCity);
@@ -66,7 +66,7 @@ public class ShortestPathBFS {
 
         Collections.reverse(pathList);
 
-        if (distances.get(destinationCity) == Integer.MAX_VALUE) {
+        if (distances.get(destinationCity) == 9999) {
             pathMap.put("message", "No path found");
         } else {
             pathMap.put("path", pathList);
