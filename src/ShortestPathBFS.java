@@ -5,26 +5,24 @@ public class ShortestPathBFS {
     private MyQueue<String> open;
     private Set<String> closed;
     private Map<String, String> path;
-    private Set<String> finalStates;
     private Map<String, Integer> distances;
 
     public ShortestPathBFS(GraphofCity graphofCity) {
         this.graphofCity = graphofCity;
-        this.open = new CustomQueue<>();
+        this.open = new CustomQueue<>();  // CustomQueue kullanıyoruz
         this.closed = new HashSet<>();
         this.path = new HashMap<>();
-        this.finalStates = new HashSet<>();
         this.distances = new HashMap<>();
     }
 
     public Map<String, Object> findShortestPath(String startCity, String destinationCity) {
-        // Initialize distances for all cities as unreachable (max value)
         for (String city : graphofCity.getGraph().keySet()) {
             distances.put(city, Integer.MAX_VALUE);
         }
 
         open.offer(startCity);
         distances.put(startCity, 0);
+        path.put(startCity, null);
 
         while (!open.isEmpty()) {
             String currentCity = open.poll();
@@ -40,33 +38,27 @@ public class ShortestPathBFS {
                 int distanceToSuccessor = entry.getValue();
 
                 if (distanceToSuccessor == 99999) {
-                    continue; // Skip unreachable cities
+                    continue;
                 }
 
-                // If the successor is not in the closed or open sets, or we found a shorter path
-                if (!closed.contains(successor) && !open.contains(successor)) {
-                    open.offer(successor);
+                int newDist = distances.get(currentCity) + distanceToSuccessor;
+
+                if (!closed.contains(successor) && newDist < distances.get(successor)) {
+                    distances.put(successor, newDist);
                     path.put(successor, currentCity);
-                    distances.put(successor, distances.get(currentCity) + distanceToSuccessor);
-                } else if (distances.get(successor) > distances.get(currentCity) + distanceToSuccessor) {
-                    // Found a shorter path
-                    path.put(successor, currentCity);
-                    distances.put(successor, distances.get(currentCity) + distanceToSuccessor);
                     open.offer(successor);
                 }
             }
         }
 
-        // If we exit the loop, no path was found
-        return null; // Return null when no path is found
+        return null;
     }
 
     private Map<String, Object> constructPath(String startCity, String destinationCity) {
         Map<String, Object> pathMap = new LinkedHashMap<>();
-        String currentCity = destinationCity;
         List<String> pathList = new ArrayList<>();
+        String currentCity = destinationCity;
 
-        // Build the path from destination back to start by following the 'path' map
         while (currentCity != null) {
             pathList.add(currentCity);
             currentCity = path.get(currentCity);
@@ -74,7 +66,6 @@ public class ShortestPathBFS {
 
         Collections.reverse(pathList);
 
-        // If the distance to the destination is still unreachable, return a message
         if (distances.get(destinationCity) == Integer.MAX_VALUE) {
             pathMap.put("message", "No path found");
         } else {
@@ -86,6 +77,6 @@ public class ShortestPathBFS {
     }
 
     public void addFinalState(String finalState) {
-        finalStates.add(finalState);
+        // Additional functionality if needed
     }
 }

@@ -1,8 +1,11 @@
 interface MyQueue<T> {
-    void offer(T item);      // O(1)
-    T poll();                // O(1)
-    boolean isEmpty();       // O(1)
-    boolean contains(T item); // O(n)
+    void offer(T item);
+    T poll();
+    T peek();
+    boolean isEmpty();
+    int size();
+
+    boolean contains(T item);
 }
 
 class CustomQueue<T> implements MyQueue<T> {
@@ -22,10 +25,6 @@ class CustomQueue<T> implements MyQueue<T> {
         this.front = this.rear = null;
     }
 
-    /**
-     * Adds an element to the end of the queue.
-     * Time Complexity: O(1)
-     */
     @Override
     public void offer(T item) {
         Node<T> newNode = new Node<>(item);
@@ -37,10 +36,6 @@ class CustomQueue<T> implements MyQueue<T> {
         }
     }
 
-    /**
-     * Removes and returns the element from the front of the queue.
-     * Time Complexity: O(1)
-     */
     @Override
     public T poll() {
         if (front == null) {
@@ -54,19 +49,21 @@ class CustomQueue<T> implements MyQueue<T> {
         return data;
     }
 
-    /**
-     * Checks if the queue is empty.
-     * Time Complexity: O(1)
-     */
+    @Override
+    public T peek() {
+        return null;
+    }
+
     @Override
     public boolean isEmpty() {
         return front == null;
     }
 
-    /**
-     * Checks if the queue contains a specific element.
-     * Time Complexity: O(n)
-     */
+    @Override
+    public int size() {
+        return 0;
+    }
+
     @Override
     public boolean contains(T item) {
         Node<T> current = front;
