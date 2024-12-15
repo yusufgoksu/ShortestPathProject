@@ -18,6 +18,7 @@ public class ShortestPath {
             System.out.println("\nMenu:");
             System.out.println("1. Find shortest path using DFS");
             System.out.println("2. Find shortest path using BFS");
+            System.out.println("3. Print both algorithm Distance and Path");
             System.out.println("0. Exit");
             System.out.print("Enter your choice: ");
 
@@ -25,12 +26,13 @@ public class ShortestPath {
                 int choice = scanner.nextInt();
                 switch (choice) {
                     case 1:
-                        System.out.println("For calculation it will use Dfs Alogorithm");
-                        findShortestPath(graphofCity, scanner, false);
+                        findShortestPath(graphofCity, scanner, choice);
                         break;
                     case 2:
-                        System.out.println("For calculation it will use Bfs Alogorithm");
-                        findShortestPath(graphofCity, scanner, true);
+                        findShortestPath(graphofCity, scanner, choice);
+                        break;
+                    case 3:
+                        findShortestPath(graphofCity, scanner, choice);
                         break;
                     case 0:
                         System.out.println("Exiting the program. Thank you for choosing us");
@@ -80,14 +82,14 @@ public class ShortestPath {
     }
 
 
-    private static void findShortestPath(GraphofCity graphofCity, Scanner scanner, boolean useBFS) {
+    private static void findShortestPath(GraphofCity graphofCity, Scanner scanner,int choice) {
         Map<String, String> cityNames = MakeCityNamesNormal(graphofCity); // Şehir isimlerini normalize et
         String startCity;
         String destinationCity;
 
         // Başlangıç şehri doğrulama
         while (true) {
-            System.out.print("\nEnter the start city: ");
+            System.out.print("Enter the start city: ");
             startCity = scanner.next().trim().toLowerCase();
 
             if (cityNames.containsKey(startCity)) {
@@ -100,7 +102,7 @@ public class ShortestPath {
 
         // Hedef şehri doğrulama
         while (true) {
-            System.out.print("\nEnter the destination city: ");
+            System.out.print("Enter the destination city: ");
             destinationCity = scanner.next().trim().toLowerCase();
 
             if (cityNames.containsKey(destinationCity)) {
@@ -112,18 +114,36 @@ public class ShortestPath {
         }
 
         // Şehirler doğrulandıktan sonra algoritmaya göre işlem yap
-        if (useBFS) {
-            ShortestPathBFS shortestPathBFS = new ShortestPathBFS(graphofCity);
-            shortestPathBFS.addFinalState(destinationCity);
-            Map<String, Object> shortestPathBFSResult = shortestPathBFS.findShortestPath(startCity, destinationCity);
-
-            displayResult(startCity, destinationCity, shortestPathBFSResult, "BFS");
-        } else {
+        if (choice == 1) {
+            // DFS kullanarak en kısa yolu bulma
             ShortestPathDFS shortestPathDFS = new ShortestPathDFS(graphofCity);
             shortestPathDFS.addFinalState(destinationCity);
             Map<String, Object> shortestPathDFSResult = shortestPathDFS.findShortestPath(startCity, destinationCity);
 
             displayResult(startCity, destinationCity, shortestPathDFSResult, "DFS");
+        } else if (choice == 2) {
+            // BFS kullanarak en kısa yolu bulma
+            ShortestPathBFS shortestPathBFS = new ShortestPathBFS(graphofCity);
+            shortestPathBFS.addFinalState(destinationCity);
+            Map<String, Object> shortestPathBFSResult = shortestPathBFS.findShortestPath(startCity, destinationCity);
+
+            displayResult(startCity, destinationCity, shortestPathBFSResult, "BFS");
+
+        }
+        else if (choice==3){
+            // DFS kullanarak en kısa yolu bulma
+            ShortestPathDFS shortestPathDFS = new ShortestPathDFS(graphofCity);
+            shortestPathDFS.addFinalState(destinationCity);
+            Map<String, Object> shortestPathDFSResult = shortestPathDFS.findShortestPath(startCity, destinationCity);
+            displayResult(startCity, destinationCity, shortestPathDFSResult, "DFS");
+
+            // BFS kullanarak en kısa yolu bulma
+            ShortestPathBFS shortestPathBFS = new ShortestPathBFS(graphofCity);
+            shortestPathBFS.addFinalState(destinationCity);
+            Map<String, Object> shortestPathBFSResult = shortestPathBFS.findShortestPath(startCity, destinationCity);
+
+            displayResult(startCity, destinationCity, shortestPathBFSResult, "BFS");
+
         }
     }
 
@@ -141,7 +161,7 @@ public class ShortestPath {
         if (result != null) {
             List<String> path = (List<String>) result.get("path");
             int distance = (int) result.get("distance");
-
+            System.out.println(" ");
             System.out.println("Shortest path from " + startCity + " to " + destinationCity + " using " + algorithm + ":");
             System.out.println("Path: " + String.join(" -> ", path));
             System.out.println("Total Distance: " + distance + " km");
@@ -151,4 +171,3 @@ public class ShortestPath {
     }
 
 }
-
