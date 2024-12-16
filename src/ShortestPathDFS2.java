@@ -34,7 +34,8 @@ public class ShortestPathDFS2 {
             closed.add(currentCity);
 
             if (currentCity.equals(destinationCity)) {
-                endTime = System.nanoTime();  // Timer durdur
+                endTime = System.nanoTime();
+                System.out.println(" ");// Timer durdur
                 System.out.println("Execution Time: " + (endTime - startTime) + " nanoseconds");
                 return constructPath(startCity, destinationCity);
             }
@@ -57,10 +58,6 @@ public class ShortestPathDFS2 {
                 }
             }
         }
-
-        endTime = System.nanoTime();  // Timer durdur
-        System.out.println(" ");
-        System.out.println("Execution Time Dfs not optimized one: " + (endTime - startTime) + " nanoseconds");
 
         return null;
     }

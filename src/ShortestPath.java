@@ -44,13 +44,16 @@ public class ShortestPath {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Invalid choice. Please enter 1, 2, or 0.");
+                        System.out.println("Invalid choice. Please enter 1, 2, 3, 4 or 0.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid number (1, 2, or 0).");
+                System.out.println("Invalid input. Please enter a valid number (1, 2, 3, 4 or 0).");
                 scanner.next();
             }
+
+
         }
+
 
     }
 
