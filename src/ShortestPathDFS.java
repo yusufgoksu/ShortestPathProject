@@ -1,35 +1,45 @@
 import java.util.*;
 
 public class ShortestPathDFS {
+
     private GraphofCity graphofCity;
-    private MyStack<String> open;
+    private MyStack<String> stack;
     private Set<String> closed;
     private Map<String, String> path;
     private Map<String, Integer> distances;
+    private CustomList<List<String>> allPaths;
+    private List<Integer> allDistances;
+
+    private long startTime;  // Timer başlangıç zamanı
+    private long endTime;    // Timer bitiş zamanı
 
     public ShortestPathDFS(GraphofCity graphofCity) {
         this.graphofCity = graphofCity;
-        this.open = new CustomStack<>();  // CustomStack kullanıyoruz
+        this.stack = new CustomStack<>();
         this.closed = new HashSet<>();
         this.path = new HashMap<>();
         this.distances = new HashMap<>();
+        this.allPaths = new CustomList<>();
+        this.allDistances = new ArrayList<>();
     }
 
     public Map<String, Object> findShortestPath(String startCity, String destinationCity) {
+        startTime = System.nanoTime();  // Timer başlat
+
         for (String city : graphofCity.getGraph().keySet()) {
-            distances.put(city, Integer.MAX_VALUE);
+            distances.put(city, 9999);
         }
 
-        open.push(startCity);
+        stack.push(startCity);
         distances.put(startCity, 0);
         path.put(startCity, null);
 
-        while (!open.isEmpty()) {
-            String currentCity = open.pop();
+        while (!stack.isEmpty()) {
+            String currentCity = stack.pop();
             closed.add(currentCity);
 
             if (currentCity.equals(destinationCity)) {
-                return constructPath(startCity, destinationCity);
+                savePath(destinationCity);
             }
 
             Map<String, Integer> successors = graphofCity.getGraph().get(currentCity);
@@ -46,37 +56,56 @@ public class ShortestPathDFS {
                 if (!closed.contains(successor) && newDist < distances.get(successor)) {
                     distances.put(successor, newDist);
                     path.put(successor, currentCity);
-                    open.push(successor);
+                    stack.push(successor);
                 }
             }
+
+            closed.remove(currentCity);  // Geçici olarak kaldır, başka yollar keşfetmek için
         }
 
-        return null;
+        endTime = System.nanoTime();  // Timer durdur
+        System.out.println(" ");
+
+        System.out.println("Execution Time For DFS : " + (endTime - startTime) + " nanoseconds");
+
+        return findShortestPathResult(destinationCity);
     }
 
-    private Map<String, Object> constructPath(String startCity, String destinationCity) {
-        Map<String, Object> pathMap = new LinkedHashMap<>();
-        List<String> pathList = new ArrayList<>();
+    private void savePath(String destinationCity) {
+        List<String> currentPath = new ArrayList<>();
         String currentCity = destinationCity;
 
         while (currentCity != null) {
-            pathList.add(currentCity);
+            currentPath.add(currentCity);
             currentCity = path.get(currentCity);
         }
 
-        Collections.reverse(pathList);
+        Collections.reverse(currentPath);
+        allPaths.add(currentPath);
+        allDistances.add(distances.get(destinationCity));
+    }
 
-        if (distances.get(destinationCity) == 9999) {
+    private Map<String, Object> findShortestPathResult(String destinationCity) {
+        Map<String, Object> pathMap = new LinkedHashMap<>();
+
+        if (allPaths.isEmpty()) {
             pathMap.put("message", "No path found");
         } else {
-            pathMap.put("path", pathList);
-            pathMap.put("distance", distances.get(destinationCity));
+            int Index = 0;
+            for (int i = 1; i < allDistances.size(); i++) {
+                if (allDistances.get(i) < allDistances.get(Index)) {
+                    Index = i;
+                }
+            }
+
+            pathMap.put("path", allPaths.get(Index));
+            pathMap.put("distance", allDistances.get(Index));
         }
 
         return pathMap;
     }
 
     public void addFinalState(String finalState) {
-        // Additional functionality if needed
+        // Placeholder for any additional functionality if needed
     }
 }

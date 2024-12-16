@@ -2,33 +2,43 @@ import java.util.*;
 
 public class ShortestPathBFS {
     private GraphofCity graphofCity;
-    private MyQueue<String> open;
+    private MyQueue<String> que;
     private Set<String> closed;
     private Map<String, String> path;
     private Map<String, Integer> distances;
 
+    private long startTime;  // Timer başlangıç zamanı
+    private long endTime;    // Timer bitiş zamanı
+
     public ShortestPathBFS(GraphofCity graphofCity) {
         this.graphofCity = graphofCity;
-        this.open = new CustomQueue<>();  // CustomQueue kullanıyoruz
+        this.que = new CustomQueue<>();
         this.closed = new HashSet<>();
         this.path = new HashMap<>();
         this.distances = new HashMap<>();
     }
 
     public Map<String, Object> findShortestPath(String startCity, String destinationCity) {
+        startTime = System.nanoTime();  // Timer başlat
+
         for (String city : graphofCity.getGraph().keySet()) {
-            distances.put(city, 9999);
+            distances.put(city, 9999);  // Başlangıç mesafelerini 9999 yap
         }
 
-        open.offer(startCity);
+        que.offer(startCity);
         distances.put(startCity, 0);
         path.put(startCity, null);
 
-        while (!open.isEmpty()) {
-            String currentCity = open.poll();
+        while (!que.isEmpty()) {
+            String currentCity = que.poll();
             closed.add(currentCity);
 
             if (currentCity.equals(destinationCity)) {
+                endTime = System.nanoTime();  // Timer durdur
+
+                System.out.println(" ");
+                System.out.println("BFS Search Execution Time: " + (endTime - startTime) + " nanoseconds");
+
                 return constructPath(startCity, destinationCity);
             }
 
@@ -46,11 +56,15 @@ public class ShortestPathBFS {
                 if (!closed.contains(successor) && newDist < distances.get(successor)) {
                     distances.put(successor, newDist);
                     path.put(successor, currentCity);
-                    open.offer(successor);
+                    que.offer(successor);
                 }
             }
         }
 
+        endTime = System.nanoTime();// Timer durdur
+
+        System.out.println(" ");
+        System.out.println("BFS Search Execution Time: " + (endTime - startTime) + " nanoseconds");
         return null;
     }
 
@@ -77,6 +91,6 @@ public class ShortestPathBFS {
     }
 
     public void addFinalState(String finalState) {
-        // Additional functionality if needed
+        // to make the destinational city a final state
     }
 }
