@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -6,13 +5,14 @@ import java.util.*;
 
 public class ShortestPath {
     public static void main(String[] args) {
+        // Load the graph from a CSV file
         GraphofCity graphofCity = readCSV("C:\\Users\\yusuf\\OneDrive\\Desktop\\ShortestPath Project\\out\\production\\ShortestPath Project\\Turkish cities .csv");
 
         Scanner scanner = new Scanner(System.in);
         if (graphofCity == null) {
             System.out.println(" ");
-            System.out.println("CSV file could not be loaded,pleas check your path . Exiting the program.");
-            System.exit(100);  // exiting program to not show user interface
+            System.out.println("CSV file could not be loaded, please check your path. Exiting the program.");
+            System.exit(100);  // Exiting program to avoid errors
         }
 
         while (true) {
@@ -44,26 +44,21 @@ public class ShortestPath {
                         System.exit(0);
                         break;
                     default:
-                        System.out.println("Invalid choice. Please enter 1, 2, 3, 4 or 0.");
+                        System.out.println("Invalid choice. Please enter 1, 2, 3, 4, or 0.");
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a valid number (1, 2, 3, 4 or 0).");
+                System.out.println("Invalid input. Please enter a valid number (1, 2, 3, 4, or 0).");
                 scanner.next();
             }
-
-
         }
-
-
     }
 
-
-
     private static GraphofCity readCSV(String csvFile) {
+        // Reads the graph data from a CSV file
         GraphofCity graphofCity = new GraphofCity();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
-            String[] cities = reader.readLine().split(",");  // İlk satırdaki şehir isimlerini oku
+            String[] cities = reader.readLine().split(",");  // Read city names from the first row
 
             String line;
             while ((line = reader.readLine()) != null) {
@@ -71,7 +66,7 @@ public class ShortestPath {
                 String currentCity = distances[0];
                 Map<String, Integer> distancesMap = new HashMap<>();
 
-                // Şehirlere olan mesafeleri ekle
+                // Add distances to the city map
                 for (int i = 1; i < distances.length; i++) {
                     try {
                         int distance = Integer.parseInt(distances[i]);
@@ -89,44 +84,28 @@ public class ShortestPath {
         return graphofCity;
     }
 
-
-    private static void findShortestPath(GraphofCity graphofCity, Scanner scanner,int choice) {
-        Map<String, String> cityNames = MakeCityNamesNormal(graphofCity); // Şehir isimlerini normalize et
+    private static void findShortestPath(GraphofCity graphofCity, Scanner scanner, int choice) {
+        // Normalize city names for consistent user input
+        Map<String, String> cityNames = MakeCityNamesNormal(graphofCity);
         String startCity;
         String destinationCity;
 
-        // Başlangıç şehri doğrulama
+        // Validate the start city
         while (true) {
-            System.out.println("Avaliable Cities");
-            System.out.println("1-Gaziantep");
-            System.out.println("2-Konya");
-            System.out.println("3-Samsun");
-            System.out.println("4-Batman");
-            System.out.println("5-Izmir");
-            System.out.println("6-Urfa");
-            System.out.println("7-Kayseri");
-            System.out.println("8-Denizli");
-            System.out.println("9-Ankara");
-            System.out.println("10-Adana");
-            System.out.println("11-Istanbul");
-            System.out.println("12-Bursa");
-            System.out.println("13-Diyarbakir");
-            System.out.println("14-Trabzon");
-            System.out.println("15-Antalya");
-            System.out.println("16-Mersin");
-            System.out.println("17-Malatya");
+            System.out.println("Available Cities: " + String.join(", ", cityNames.values() + "."));
+            System.out.println(" ");
             System.out.print("Enter the start city: ");
             startCity = scanner.next().trim().toLowerCase();
 
             if (cityNames.containsKey(startCity)) {
-                startCity = cityNames.get(startCity); // Normalize edilmiş ismi geri al
+                startCity = cityNames.get(startCity);
                 break;
             } else {
                 System.out.println("Invalid city name. Please enter a valid start city.");
             }
         }
 
-        // Hedef şehri doğrulama
+        // Validate the destination city
         while (true) {
             System.out.print("Enter the destination city: ");
             destinationCity = scanner.next().trim().toLowerCase();
@@ -139,81 +118,66 @@ public class ShortestPath {
             }
         }
 
-        // Şehirler doğrulandıktan sonra algoritmaya göre işlem yap
-        if (choice == 1) {//Dfs Algorithm
-            // DFS kullanarak en kısa yolu bulma
+        // Process based on user choice
+        if (choice == 1) {
+            // Depth-First Search (DFS) - Time Complexity: O(V + E)
             ShortestPathDFS shortestPathDFS = new ShortestPathDFS(graphofCity);
             shortestPathDFS.addFinalState(destinationCity);
             Map<String, Object> shortestPathDFSResult = shortestPathDFS.findShortestPath(startCity, destinationCity);
 
             displayResult(startCity, destinationCity, shortestPathDFSResult, "DFS");
-        } else if (choice == 2) {// Bfs Algorithm
-
+        } else if (choice == 2) {
+            // Breadth-First Search (BFS) - Time Complexity: O(V + E)
             ShortestPathBFS shortestPathBFS = new ShortestPathBFS(graphofCity);
             shortestPathBFS.addFinalState(destinationCity);
             Map<String, Object> shortestPathBFSResult = shortestPathBFS.findShortestPath(startCity, destinationCity);
 
             displayResult(startCity, destinationCity, shortestPathBFSResult, "BFS");
-
-        }
-        else if (choice==3){ // Print the both algorithm
-            //Dfs Algorithm
+        } else if (choice == 3) {
+            // Compare DFS and BFS
             ShortestPathDFS shortestPathDFS = new ShortestPathDFS(graphofCity);
             shortestPathDFS.addFinalState(destinationCity);
             Map<String, Object> shortestPathDFSResult = shortestPathDFS.findShortestPath(startCity, destinationCity);
             displayResult(startCity, destinationCity, shortestPathDFSResult, "DFS");
 
-            // BFS Algorithm
             ShortestPathBFS shortestPathBFS = new ShortestPathBFS(graphofCity);
             shortestPathBFS.addFinalState(destinationCity);
             Map<String, Object> shortestPathBFSResult = shortestPathBFS.findShortestPath(startCity, destinationCity);
-
             displayResult(startCity, destinationCity, shortestPathBFSResult, "BFS");
-
-        }
-        else if (choice==4){ // Print the both algorithm to see how it different same algorith
-            //Dfs Algorithm
+        } else if (choice == 4) {
+            // Compare optimized and non-optimized DFS
             ShortestPathDFS shortestPathDFS = new ShortestPathDFS(graphofCity);
             shortestPathDFS.addFinalState(destinationCity);
             Map<String, Object> shortestPathDFSResult = shortestPathDFS.findShortestPath(startCity, destinationCity);
             displayResult(startCity, destinationCity, shortestPathDFSResult, "DFS");
 
-            //Dfs Algorithm which its not optimized
             ShortestPathDFS2 shortestPathDFS2 = new ShortestPathDFS2(graphofCity);
             shortestPathDFS2.addFinalState(destinationCity);
             Map<String, Object> shortestPathDFSResult1 = shortestPathDFS2.findShortestPath(startCity, destinationCity);
-            displayResult(startCity, destinationCity, shortestPathDFSResult1, "DFS not optimized one");
-
-
-
-
+            displayResult(startCity, destinationCity, shortestPathDFSResult1, "DFS not optimized");
         }
-
     }
 
-
     private static Map<String, String> MakeCityNamesNormal(GraphofCity graphofCity) {
+        // Normalize city names to lowercase
         Map<String, String> normalizedMap = new HashMap<>();
         for (String city : graphofCity.getGraph().keySet()) {
-            normalizedMap.put(city.toLowerCase(), city); // Şehir isimlerini küçük harfe çevirerek ekle
+            normalizedMap.put(city.toLowerCase(), city);
         }
         return normalizedMap;
     }
 
-
     private static void displayResult(String startCity, String destinationCity, Map<String, Object> result, String algorithm) {
+        // Display the result of the algorithm
         if (result != null) {
-
             List<String> path = (List<String>) result.get("path");
             int distance = (int) result.get("distance");
             System.out.println(" ");
             System.out.println("Shortest path from " + startCity + " to " + destinationCity + " using " + algorithm + ":");
             System.out.println("Path: " + String.join(" -> ", path));
             System.out.println("Total Distance: " + distance + " km");
-
         } else {
             System.out.println("No path found between " + startCity + " and " + destinationCity + " using " + algorithm);
         }
     }
-
 }
