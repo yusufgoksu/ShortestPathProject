@@ -97,17 +97,5 @@ public class CustomList<T> extends AbstractList<T> {
      * Joins the elements of a CustomList<String> into a single string separated by a given separator.
      * Time Complexity: O(n), where n is the size of the list
      */
-    public static String join(String separator, CustomList<String> list) {
-        if (list.size() == 0) { // Return an empty string if the list is empty
-            return "";
-        }
-        StringBuilder result = new StringBuilder(); // StringBuilder to efficiently build the string
-        for (int i = 0; i < list.size(); i++) {
-            result.append(list.get(i)); // Append each element
-            if (i < list.size() - 1) { // Add the separator if it's not the last element
-                result.append(separator);
-            }
-        }
-        return result.toString(); // Return the resulting string
-    }
+
 }

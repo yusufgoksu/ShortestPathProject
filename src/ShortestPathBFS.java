@@ -32,7 +32,7 @@ public class ShortestPathBFS {
 
         // Initialize distances with a high value
         for (String city : graphofCity.getGraph().keySet()) {
-            distances.put(city, 9999); // Set all distances to "infinity"
+            distances.put(city, 9999); // Set all distances to "infinity as 9999"
         }
 
         que.offer(startCity); // Add starting city to queue
@@ -86,7 +86,7 @@ public class ShortestPathBFS {
      */
     private Map<String, Object> constructPath(String startCity, String destinationCity) {
         Map<String, Object> pathMap = new LinkedHashMap<>(); // Result map
-        List<String> pathList = new ArrayList<>(); // List to store the path
+        CustomList<String> pathList = new CustomList<>(); // List to store the path
         String currentCity = destinationCity;
 
         // Trace back the path from destination to start
