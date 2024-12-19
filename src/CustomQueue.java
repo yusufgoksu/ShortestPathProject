@@ -1,11 +1,11 @@
 interface MyQueue<T> {
-    void offer(T item);
-    T poll();
-    T peek();
-    boolean isEmpty();
-    int size();
+    void offer(T item); //O(1)
+    T poll(); //O(1)
+    T peek(); //O(1)
+    boolean isEmpty(); //O(1)
+    int size(); //O(n)
 
-    boolean contains(T item);
+    boolean contains(T item); //O(n)
 }
 
 class CustomQueue<T> implements MyQueue<T> {
