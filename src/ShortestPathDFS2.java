@@ -36,7 +36,7 @@ public class ShortestPathDFS2 {
             if (currentCity.equals(destinationCity)) {
                 endTime = System.nanoTime();// Timer stop
                 System.out.println(" ");
-                System.out.println("Execution Time: " + (endTime - startTime) + " nanoseconds");
+                System.out.println("Running Time for not optimized DFS " + (endTime - startTime) + " nanoseconds");
                 return constructPath(startCity, destinationCity);
             }
 

@@ -40,7 +40,7 @@ public class ShortestPathDFS {
         distances.put(startCity, 0); // Distance to startCity is 0
         path.put(startCity, null); // No previous city for startCity
 
-        // DFS traversal to explore all paths
+        // DFS algorithm  to explore all paths
         while (!stack.isEmpty()) {
             String currentCity = stack.pop(); // Process the next city
             closed.add(currentCity); // Mark it as visited
@@ -73,7 +73,8 @@ public class ShortestPathDFS {
         }
 
         endTime = System.nanoTime();  // Stop the timer
-        System.out.println("Execution Time For DFS : " + (endTime - startTime) + " nanoseconds");
+        System.out.println(" ");
+        System.out.println("Running Time For DFS : " + (endTime - startTime) + " nanoseconds");
 
         return findShortestPathResult(destinationCity); // Return the shortest path result
     }
@@ -82,7 +83,7 @@ public class ShortestPathDFS {
      // Time Complexity: O(V), where V is the number of cities in the path.
 
     private void savePath(String destinationCity) {
-        List<String> currentPath = new ArrayList<>(); // List to store the path
+        CustomList<String> currentPath = new CustomList<>();// List to store the path
         String currentCity = destinationCity;
 
         while (currentCity != null) {

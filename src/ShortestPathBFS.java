@@ -48,7 +48,7 @@ public class ShortestPathBFS {
                 // Destination found, calculate execution time
                 endTime = System.nanoTime();
                 System.out.println(" ");
-                System.out.println("BFS Search Execution Time: " + (endTime - startTime) + " nanoseconds");
+                System.out.println("BFS Search Running Time: " + (endTime - startTime) + " nanoseconds");
                 return constructPath(startCity, destinationCity); // Construct and return path
             }
 
